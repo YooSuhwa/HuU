@@ -1,0 +1,70 @@
+/* 2016.11.8 */
+package Usuhwa;
+
+import java.io.UnsupportedEncodingException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+public class Term {
+
+	public static void main(String[] args) {
+		try {
+			Class.forName("org.gjt.mm.mysql.Driver");
+			System.out.println("!!");
+		}
+		catch(ClassNotFoundException e) {
+			System.out.println("!");
+		}
+	
+	Connection con = null;
+	//String url = "jdbc:mysql://127.0.0.1:3306/termp";
+	String url = "jdbc:mysql://localhost:3306/termp?useUnicode=true&characterEncoding=EUC_KR";
+	//String url="jdbc:mysql://localhost/termp?useUnicode=true&characterEncoding=euc-kr" ;
+	//String url="jdbc:mysql://localhost/myDB?useUnicode=true&characterEncoding=ksc5601";
+		
+	String user = "root";
+	String pass = "12345";
+	try {
+		con = DriverManager.getConnection(url, user, pass);
+		System.out.println("My-SQL !!");
+	}catch(SQLException e) {
+		System.out.println("My-SQL!");
+	}
+	
+	PreparedStatement ps = null;
+	ResultSet rs = null;
+
+	try{
+		String sql = "select * from type";
+		
+		ps = con.prepareStatement(sql);
+		rs = ps.executeQuery();
+		while (rs.next()){
+			int ID = rs.getInt(1);
+			//String name = new String(rs.getBytes("EUC-KR"));
+			//str = new String (user.getNickname().getBytes("EUC-KR"));
+			//String name = rs.getString("name");
+			//String name =  rs.getString("name");
+			String name =  new String (rs.getString("name").getBytes("8859_1"), "KSC5601");
+			double dist = rs.getDouble(3);
+			double score = rs.getDouble(4);
+			double price = rs.getDouble(5);
+			System.out.println(ID+"\t"+name+"\t"+dist+"\t"+score+"\t"+price);
+		
+		}
+		} catch(SQLException e){
+			e.printStackTrace();
+		
+		
+	} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+	
+	
+
+}
